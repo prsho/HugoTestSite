@@ -32,20 +32,55 @@ function carousels() {
 
 /* =========================================
  *  isotope
- *  =======================================*/
+ *  =======================================
+ var $grid = $('.grid');
+     $grid.imagesLoaded(function() {
+         $grid.isotope({
+             itemSelector : '.isotope-item',
+             layoutMode: 'packery',
+             resizeContainer: true,
+             sortBy: 'random',
+         });
+     });
+
+     $('.grid').infinitescroll({
+         loading: {
+             img: 'test'
+         },
+         navSelector: '.pagination-container',
+         nextSelector: '.pagination-container span.next a',
+         itemSelector: '.isotope-item'
+     }, function(newElements) {
+         var $newElems = $(newElements).hide();
+         $newElems.imagesLoaded(function() {
+         $newElems.fadeIn();
+         $('.grid').isotope('appended', $newElems);
+         });
+     });
+ */
 
 function isotope() {
+  // with Masonry & jQuery
+  // init Masonry
+  var $grid = $('.grid').isotope({
+    itemSelector : '.isotope-item',
+    layoutMode: 'packery',
+    resizeContainer: true,
+    sortBy: 'random',
+  });
 
-    var $grid = $('.grid').isotope({
-        itemSelector: ".isotope-item",
-        layoutMode: 'packery',
-        resizeContainer: true,
-    });
+  // get Masonry instance
+  var iso = $grid.data('isotope');
 
-    $grid.imagesLoaded().progress(function () {
-        $grid.isotope('layout');
-    });
+  // init Infinite Scroll
+  $grid.infiniteScroll({
+    // Infinite Scroll options...
+    append: '.isotope__item',
+    outlayer: iso,
+  });
 }
+
+
 
 /* =========================================
  *  Off-canvas menu
